@@ -18,6 +18,20 @@ router.get('/:id', validateProjectID, async (req,res) =>{
         })
 })
 
+//GET project actions
+
+router.get('/:id/actions', validateProjectID, async (req,res) =>{
+    project.getProjectActions(req.params.id)
+        .then(actions => {
+            res.status(200).json(actions)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+            console.log(err)
+        })
+})
+
+
 //POST (requires name and description)
 
 router.post('/', validateProject, async (req, res)=>{
