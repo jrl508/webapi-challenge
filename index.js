@@ -12,3 +12,10 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+
+const server = require('./server')
+const port = 5000;
+
+server.listen(port, ()=>{
+    console.log(`And the server keeps running running and running running and running running, LETS GET IT STARTED on port ${port} `)
+})
