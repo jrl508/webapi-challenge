@@ -34,7 +34,7 @@ router.post('/', (req, res)=>{
 
 //POST action (requires project_id, description(128 char limit), notes(no limit))
 
-router.post('/:id/actions', validateProjectID, async (req, res)=>{
+router.post('/:id/actions', validateProjectID, validateAction, async (req, res)=>{
     const newAction = req.body
     const {id} = req.params
 
@@ -95,5 +95,22 @@ async function validateProjectID(req,res,next){
     }
 }
 
+function validateAction(req,res,next){
+    const postContent = req.body
+
+    if(postContent.description && postContent.notes){
+        if(postContent.description.length >=128){
+            res.status(400).json({message:'Description too long, keep it under 128 characters'})
+        } else{
+            next();
+        }
+    } else {
+        res.status(400).json({message:'description and notes fields required'})
+    }
+}
+
+function validateProject(req,res,next){
+
+}
 
 module.exports = router
