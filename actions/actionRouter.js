@@ -13,13 +13,12 @@ router.get('/:id', (req,res) =>{
         })
         .catch(err => {
             res.status(500).json(err)
-            console.log(err)
         })
 })
 
 //PUT
 
-router.put('/:id', (req, res)=>{
+router.put('/:id', validateAction, async (req, res)=>{
     const { id } = req.params
     const changes = req.body
 
@@ -51,5 +50,36 @@ router.delete('/:id', (req, res)=>{
 
 
 //Custom Middleware
+
+// async function validateActionID(req,res,next){
+//     const {id} = req.params;
+//     const validAction = await action.get(id);
+
+//     if(!validAction){
+//         res.status(400).json({message:'Invalid Action ID'})
+//     } else {
+//         req.action = validAction;
+//         next();
+//     }
+// }
+
+
+function validateAction(req,res,next){
+    const postContent = req.body
+
+    if(postContent.description && postContent.notes){
+        if(postContent.description.length >=128){
+            res.status(400).json({message:'Description too long, keep it under 128 characters'})
+        } else{
+            next();
+        }
+    } else {
+        res.status(400).json({message:'description and notes fields required'})
+    }
+}
+
+
+// Middleware seems to time out and not work like its identical projectRouter counterpart
+
 
 module.exports = router
