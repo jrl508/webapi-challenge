@@ -17,7 +17,7 @@ router.get('/:id', (req,res) =>{
         })
 })
 
-//POST
+//POST (requires name and description)
 
 router.post('/', (req, res)=>{
     const newProject = req.body
@@ -32,6 +32,20 @@ router.post('/', (req, res)=>{
 })
 
 //PUT
+
+router.put('/:id', (req, res)=>{
+    const { id } = req.params
+    const changes = req.body
+
+    project.update(id, changes)
+        .then( updated => {
+            res.status(201).json(updated)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
+
 
 
 //DELETE
