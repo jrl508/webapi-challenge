@@ -7,7 +7,7 @@ router.use(express.json())
 
 //GET project by ID
 
-router.get('/:id', (req,res) =>{
+router.get('/:id', validateProjectID, async (req,res) =>{
     project.get(req.params.id)
         .then(project => {
             res.status(200).json(project)
@@ -34,7 +34,7 @@ router.post('/', (req, res)=>{
 
 //POST action (requires project_id, description(128 char limit), notes(no limit))
 
-router.post('/:id/actions', (req, res)=>{
+router.post('/:id/actions', validateProjectID, async (req, res)=>{
     const newAction = req.body
     const {id} = req.params
 
@@ -50,7 +50,7 @@ router.post('/:id/actions', (req, res)=>{
 
 //PUT
 
-router.put('/:id', (req, res)=>{
+router.put('/:id', validateProjectID, async (req, res)=>{
     const { id } = req.params
     const changes = req.body
 
@@ -67,7 +67,7 @@ router.put('/:id', (req, res)=>{
 
 //DELETE
 
-router.delete('/:id', (req, res)=>{
+router.delete('/:id', validateProjectID, async (req, res)=>{
     const { id } = req.params
 
     project.remove(id)
@@ -83,7 +83,17 @@ router.delete('/:id', (req, res)=>{
 
 //Custom Middleware
 
+async function validateProjectID(req,res,next){
+    const {id} = req.params;
+    const validProject = await project.get(id);
 
+    if(!validProject){
+        res.status(400).json({message:'Invalid Project ID'})
+    } else {
+        req.project = validProject;
+        next();
+    }
+}
 
 
 module.exports = router
