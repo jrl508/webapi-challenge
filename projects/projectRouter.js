@@ -50,6 +50,19 @@ router.put('/:id', (req, res)=>{
 
 //DELETE
 
+router.delete('/:id', (req, res)=>{
+    const { id } = req.params
+
+    project.remove(id)
+        .then( deleted => {
+            res.status(204).json(deleted)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
+
+
 
 //Custom Middleware
 
