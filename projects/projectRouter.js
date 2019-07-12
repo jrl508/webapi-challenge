@@ -1,5 +1,6 @@
 const express = require('express')
 const project = require('../data/helpers/projectModel')
+const action = require('../data/helpers/actionModel')
 const router = express.Router()
 
 router.use(express.json())
@@ -28,6 +29,22 @@ router.post('/', (req, res)=>{
         })
         .catch(err => {
             res.status(500).json(err)
+        })
+})
+
+//POST action (requires project_id, description(128 char limit), notes(no limit))
+
+router.post('/:id/actions', (req, res)=>{
+    const newAction = req.body
+    const {id} = req.params
+
+    action.insert({project_id:id , ...newAction})
+        .then( action => {
+            res.status(201).json(action)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+            console.log(err)
         })
 })
 
