@@ -20,7 +20,7 @@ router.get('/:id', validateProjectID, async (req,res) =>{
 
 //POST (requires name and description)
 
-router.post('/', (req, res)=>{
+router.post('/', validateProject, async (req, res)=>{
     const newProject = req.body
 
     project.insert(newProject)
@@ -110,7 +110,13 @@ function validateAction(req,res,next){
 }
 
 function validateProject(req,res,next){
+    const projectContent = req.body
 
+    if (projectContent.name && projectContent.description){
+        next();
+    } else{
+        res.status(400).json({message:'description and name fields required'})
+    }
 }
 
 module.exports = router
