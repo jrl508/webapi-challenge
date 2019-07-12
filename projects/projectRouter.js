@@ -12,10 +12,34 @@ router.get('/:id', (req,res) =>{
             res.status(200).json(project)
         })
         .catch(err => {
-            res.status(500).json({message: 'whoops something went wrong, check console log'})
+            res.status(500).json(err)
             console.log(err)
         })
 })
+
+//POST
+
+router.post('/', (req, res)=>{
+    const newProject = req.body
+
+    project.insert(newProject)
+        .then( project => {
+            res.status(201).json(project)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
+
+//PUT
+
+
+//DELETE
+
+
+//Custom Middleware
+
+
 
 
 module.exports = router

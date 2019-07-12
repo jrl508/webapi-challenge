@@ -10,4 +10,12 @@ router.get('/', (req,res) =>{
 
 })
 
+//POST
+
+
+//PUT
+
+
+//DELETE
+
 module.exports = router
